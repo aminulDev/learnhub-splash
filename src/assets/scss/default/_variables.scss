@@ -1,0 +1,150 @@
+/*-- Variables --*/
+:root {
+
+    //colors 
+    --color-white: #ffffff;
+    --color-body: rgba(214, 218, 240, 0.70);
+    --color-card-bg: rgba(214, 218, 240, 0.10);
+    --white-opacity: #ffffff21;
+
+    // primary colors 
+    --color-primary-100: #9382FF;
+    --color-primary-200: #8273E2;
+    --color-primary-300: #6156A9;
+    --color-primary-400: #50478B;
+    --color-primary-500: #40396F;
+    --color-primary-600: #302A53;
+    --color-primary-700: #7E6FC0;
+
+    // secondary colors 
+    --color-secondary-100: #D6DAF0;
+    --color-secondary-200: #C7CCEB;
+    --color-secondary-300: #B8BFE5;
+    --color-secondary-400: #A9B1E0;
+    --color-secondary-500: #9AA4DA;
+    --color-secondary-600: #8F9AD6;
+    --color-secondary-700: #979AB2;
+    --color-secondary-800: #D0D0D0;
+
+    // dark colors
+    --color-dark-100: #050520;
+    --color-dark-200: #160A35;
+    --color-dark-300: #0F102A;
+    --color-dark-400: #1A1A35;
+    --color-dark-500: #d6acac;
+    --color-dark-600: #1D1D2E;
+
+    // other colors
+    --color-basic-100: #B26EF7;
+    --color-success-100: #2ECA7F;
+    --color-success-200: #219653;
+    --color-warning: #FFBD7A;
+    --color-info-100: #6AE4FF;
+    --color-error-100: #FF71BF;
+    --color-facebook-100: #1877F2;
+    --color-twitter-100: #1BA1F2;
+    --color-youtube-100: #ff0033;
+    --color-whatsapp-100: #25d366;
+
+    // card color 
+    --color-card-1: rgba(214, 218, 240, 0.10);
+
+    // border colors
+    --primary-border: #1A1A35;
+    --primary-border-2: #404056;
+
+
+    // gradient colors 
+    --color-gradient-100: linear-gradient(114deg, #B26EF7 0%, #FF71BF 46.5%, #FFBD7A 100%);
+    --color-gradient-200: linear-gradient(90deg, #B26EF7 0%, #FF71BF 51.5%, #FFBD7A 100%);
+    --color-gradient-300: linear-gradient(180deg, #7E6FC0 0%, var(--color-dark-400) 100%);
+    --color-gradient-400: linear-gradient(114deg, rgba(178, 110, 247, 0.1607843137) 0%, rgba(255, 113, 191, 0.1607843137) 46.5%, rgba(255, 152, 106, 0.1607843137) 100%);
+    --color-gradient-500: linear-gradient(90deg, #9E7AFF 0%, #FE8BBB 32%, #FFBD7A 65.5%, #FEE398 100%);
+    --color-gradient-600: linear-gradient(180deg, #404060 0%, rgba(63, 63, 100, 0) 100%);
+    --color-gradient-700: linear-gradient(180deg, #141330 0%, rgba(255, 255, 255, 0) 100%);
+    --color-gradient-800: linear-gradient(180deg, #202032 0%, #2D2D4A 100%);
+    --color-gradient-900: linear-gradient(180deg, #7E6FC0 0%, #302A53 100%);
+
+    --default-gradient-2: linear-gradient(170deg, #1A1A35 6.13%, #0F102A 89%);
+
+
+    // Shadows 
+    --shadow-1: 0px 9px 46px 0px rgba(255, 113, 191, 0.20);
+    --shadow-2: 0px 14px 102px 0px rgba(178, 110, 247, 0.20);
+    --shadow-3: 0px 24px 45px 0px rgba(255, 113, 191, 0.20);
+    --shadow-4: 0px 15px 26px 0px rgba(26, 26, 53, 0.60);
+    --shadow-5: 0px 3px 0px 0px rgba(255, 113, 191, 0.55);
+    --shadow-6: 0px 4px 12.2px rgba(139, 111, 185, 0.20);
+    --shadow-7: 0px 14px 102px 0px rgba(80, 48, 125, 0.40);
+
+
+    //Border-radius
+    --radius-10: 10px;
+    --radius-big: 12px;
+    --radius-small: 6px;
+    --radius: 8px;
+    --border-width: 2px;
+
+
+    //transition easing
+    --transition: 0.3s;
+    --transition-2: 256ms ease-in-out;
+    --transition-3: transform .85s cubic-bezier(.23, 1, .32, 1), background .3s, border .3s, --transition-4: all .25s cubic-bezier(.645, .045, .355, 1);
+    --transition-4: all .25s cubic-bezier(.645, .045, .355, 1);
+    --transition-5: 0.8s;
+
+
+    //Font Family
+    --font-primary: "Neue Plak";
+
+
+    //Font weight
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semiBold: 600;
+    --fw-bold: 700;
+    --fw-extra-bold: 800;
+    --fw-black: 900;
+
+
+
+    //Fonts Size
+    --font-size-b1: 24px;
+    --font-size-b2: 18px;
+    --font-size-b3: 16px;
+    --font-size-b4: 14px;
+    --font-size-b5: 12px;
+
+
+    //Line Height
+    --line-height-b1: 1.5; //24px
+    --line-height-b2: 1.67; //18px
+    --line-height-b3: 1.75; //16px
+    --line-height-b4: 1.5; //14px
+    --line-height-b5: 1.5; //12px
+
+
+
+    // Heading Font 
+    --h1: 56px; //56px 1.18
+    --h2: 48px; //48px 1.20
+    --h3: 34px; //34px 1.02
+    --h4: 30px; //30px 1.25
+    --h5: 24px; //24px 1.5
+    --h6: 20px; //20px 1.5
+    --div-gap-1: 10px;
+
+}
+
+// Layouts Variation
+$smlg-device: 'only screen and (max-width: 1199px)';
+$lgtolp-device: 'only screen and (min-width: 1200px)';
+$extra-device: 'only screen and (min-width: 1600px) and (max-width: 1919px)';
+$laptop-device: 'only screen and (min-width: 1200px) and (max-width: 1599px)';
+$xl-layout: 'only screen and (min-width: 1200px) and (max-width: 1399px)';
+$lg-layout: 'only screen and (min-width: 992px) and (max-width: 1199px)';
+$md-layout: 'only screen and (min-width: 768px) and (max-width: 991px)';
+$sm-layout: 'only screen and (max-width: 767px)';
+$large-mobile: 'only screen and (max-width: 575px)';
+$small-mobile: 'only screen and (max-width: 479px)';

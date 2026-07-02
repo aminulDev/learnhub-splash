@@ -1,0 +1,443 @@
+/*=====================
+    All Extend Here
+=======================*/
+/* -----------------------------
+    Hover Dropdown Extend  
+--------------------------------*/
+
+%rbt-dropdown-type-1 {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  visibility: hidden;
+  clip: rect(0px, 200vw, 0, 0px);
+  opacity: 0;
+  transition:
+    opacity 0.4s linear,
+    clip 0.6s linear,
+    visibility 0s 0.4s;
+  transform: translateZ(0);
+}
+
+%rbt-hover-dropdown-type-1 {
+  top: 100%;
+  visibility: visible;
+  opacity: 1;
+  clip: rect(0px, 100vw, 200vh, -30px);
+  transition:
+    clip 0.6s linear,
+    opacity 0.4s linear;
+}
+
+%liststyle {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/*-----------------------------
+      Rbt Background Gradient
+  -------------------------------*/
+
+%bg-gradient-9 {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(
+    270deg,
+    var(--color-secondary-100) 0%,
+    var(--color-primary-100) 100%
+  ) !important;
+
+  &::after {
+    background: linear-gradient(
+      rgba(255, 255, 255, 1) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    z-index: -1;
+  }
+}
+
+/*----------------------
+      Image Overlay
+  ------------------------*/
+
+@mixin overlay($--color-gradient: var(--color-gradient-3)) {
+  &::after {
+    position: absolute;
+    content: "";
+    background: $--color-gradient;
+    filter: blur(150px);
+    width: 250px;
+    height: 250px;
+    right: 20%;
+    top: 15%;
+    z-index: 0;
+  }
+}
+
+/*----------------------
+      Bg Image  
+  ------------------------*/
+
+%bgImagePosition {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+@mixin liststyle($style: none) {
+  padding: 0;
+  margin: 0;
+  list-style: $style;
+}
+
+@mixin linkHover() {
+  a {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: currentColor;
+      transform: scaleX(0);
+      transform-origin: bottom right;
+      transition: transform 0.3s;
+    }
+
+    &:hover {
+      &::after {
+        transform-origin: bottom left;
+        transform: scaleX(1);
+      }
+    }
+  }
+}
+
+%transition {
+  transition: var(--transition);
+}
+
+%transition-4 {
+  transition: var(--transition-4);
+}
+
+/*----------------------
+      Text Color  
+  ------------------------*/
+.color-secondary-100 {
+  color: var(--color-secondary-100) !important;
+}
+.color-secondary-400 {
+  color: var(--color-secondary-400) !important;
+}
+.color-secondary-700 {
+  color: var(--color-secondary-700) !important;
+}
+.color-body {
+  color: var(--color-body) !important;
+}
+.color-warning {
+  color: var(--color-warning) !important;
+}
+.color-primary-100 {
+  color: var(--color-primary-100) !important;
+}
+
+.color-coral {
+  color: var(--color-coral) !important;
+}
+
+.color-violet {
+  color: var(--color-violet) !important;
+}
+
+.color-pink {
+  color: var(--color-pink) !important;
+}
+
+.color-white {
+  color: var(--color-white) !important;
+}
+
+.color-danger {
+  color: var(--color-danger) !important;
+}
+
+.color-warning {
+  color: var(--color-warning) !important;
+}
+
+.color-success-100 {
+  color: var(--color-success-100) !important;
+}
+
+.color-basic-100 {
+  color: var(--color-basic-100) !important;
+}
+
+/*----------------------
+      Background Color  
+  ------------------------*/
+.bg-color-dark-100 {
+  background-color: var(--color-dark-100);
+}
+.bg-color-dark-200 {
+  background-color: var(--color-dark-200);
+}
+.bg-color-dark-300 {
+  background-color: var(--color-dark-300);
+}
+.bg-color-dark-400 {
+  background-color: var(--color-dark-400);
+}
+.bg-color-dark-600 {
+  background-color: var(--color-dark-600);
+}
+.bg-color-primary-100 {
+  background-color: var(--color-primary-100) !important;
+}
+
+.bg-color-heading {
+  background-color: var(--color-secondary-100) !important;
+}
+
+.bg-color-white {
+  background-color: var(--color-white) !important;
+}
+
+.bg-color-body {
+  background-color: var(--color-body) !important;
+}
+
+.bg-color-card-bg {
+  background-color: var(--color-card-bg) !important;
+}
+.card-bg-1 {
+  background: var(--color-card-1) !important;
+}
+
+.card-bg-2 {
+  background: var(--color-card-2) !important;
+}
+
+.card-bg-3 {
+  background: var(--color-card-3) !important;
+}
+
+.card-bg-4 {
+  background: var(--color-card-4) !important;
+}
+
+.card-bg-5 {
+  background: var(--color-card-5) !important;
+}
+
+.card-bg-6 {
+  background: var(--color-card-6) !important;
+}
+
+.bg-color-success {
+  background-color: var(--color-success) !important;
+}
+
+.bg-color-danger {
+  background-color: var(--color-danger) !important;
+}
+
+.bg-color-warning {
+  background-color: var(--color-warning) !important;
+}
+
+.bg-color-info {
+  background-color: var(--color-info) !important;
+}
+
+/*-----------------------------
+      Rbt Background Gradient
+  -------------------------------*/
+
+.rbt-gradient {
+  position: relative;
+
+  &::before {
+    content: "";
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    height: 100%;
+  }
+
+  &.bottom-theme-gradient {
+    bottom: 0;
+    height: 800;
+
+    &::before {
+      background: var(--gradient-3);
+    }
+  }
+}
+
+.bg-gradient-1 {
+  background: var(--gradient-1) !important;
+}
+
+.bg-gradient-2 {
+  background: var(--gradient-2) !important;
+}
+
+.bg-gradient-3 {
+  background: var(--gradient-3) !important;
+}
+
+.bg-gradient-4 {
+  background: var(--gradient-4) !important;
+}
+
+.bg-gradient-5 {
+  background: var(--gradient-5) !important;
+}
+
+.bg-gradient-6 {
+  background: var(--gradient-6) !important;
+}
+
+.bg-gradient-7 {
+  background: var(--gradient-7) !important;
+}
+
+.bg-gradient-8 {
+  background: var(--gradient-8) !important;
+}
+
+.bg-gradient-9 {
+  @extend %bg-gradient-9;
+}
+
+.bg-gradient-10 {
+  background: linear-gradient(
+    141.76deg,
+    #f5d9d5 0.59%,
+    #f5eab4 39.43%,
+    #b76cea 100%
+  ) !important;
+}
+
+.bg-gradient-11 {
+  background: linear-gradient(180deg, #eedefd 0%, #ffffff 100%) !important;
+}
+
+.bg-gradient-12 {
+  background: linear-gradient(
+    208.29deg,
+    #f5d9d5 0%,
+    #f5eab4 42.92%,
+    #99d9f5 100%
+  ) !important;
+}
+
+.bg-gradient-13 {
+  background: linear-gradient(
+    180deg,
+    rgba(218, 251, 255, 0) 0%,
+    #dafbff 100%
+  ) !important;
+}
+
+.bg-gradient-14 {
+  background: var(--gradient-9) !important;
+}
+
+.bg-gradient-15 {
+  background: linear-gradient(151.71deg, #29c986 0%, #2fc8e5 100%) !important;
+}
+
+.bg-gradient-16 {
+  background: linear-gradient(151.71deg, #ff652d 0%, #ffa426 100%) !important;
+}
+
+.bg-gradient-17 {
+  background: linear-gradient(151.71deg, #30c4ff 0%, #7259ff 100%) !important;
+}
+
+.theme-mainbg-gradient {
+  background-color: var(--color-light);
+  position: relative;
+  background-image: url(../images/bg/bg-g1.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.lrn-gradient-100 {
+  background: var(--color-gradient-100);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.lrn-gradient-500 {
+  background: linear-gradient(
+    90deg,
+    #9e7aff 0%,
+    #fe8bbb 32%,
+    #ffbd7a 65.5%,
+    #fee398 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.lrn-gradient-300 {
+  background: var(--color-gradient-900);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+/*---------------------- 
+      Common Css 
+  --------------------------*/
+.liststyle {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.height-auto {
+  height: auto !important;
+}
+
+.max-width-auto {
+  max-width: inherit !important;
+}
+
+.lrn-rounded-5 {
+  border-radius: 5px;
+}
+
+.lrn-rounded-15 {
+  border-radius: 15px;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.border-bottom-primary {
+  border-bottom: 1px solid var(--primary-border);
+}
+
+.flex-auto {
+  flex: auto;
+}

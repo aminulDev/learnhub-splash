@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'Neue Plak Extra';
+    src: url('../../fonts/NeuePlak-ExtraBlack.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-ExtraBlack.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak';
+    src: url('../../fonts/NeuePlak-Bold.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak';
+    src: url('../../fonts/NeuePlak-Light.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak';
+    src: url('../../fonts/NeuePlak-SemiBold.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak';
+    src: url('../../fonts/NeuePlak-Regular.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak';
+    src: url('../../fonts/NeuePlak-Black.woff2') format('woff2'),
+        url('../../fonts/NeuePlak-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Neue Plak Text';
+    src: url('../../fonts/NeuePlakText-Regular.woff2') format('woff2'),
+        url('../../fonts/NeuePlakText-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

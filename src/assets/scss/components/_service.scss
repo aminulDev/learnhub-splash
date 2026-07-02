@@ -1,0 +1,94 @@
+@use "../default" as *;
+
+.lrn-service {
+    &-wrap {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        align-items: start;
+
+        @media #{$md-layout, $sm-layout} {
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+    }
+
+    &-left {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+
+        @media #{$sm-layout} {
+            gap: 40px;
+        }
+    }
+
+    &-right {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+
+        @media #{$large-mobile} {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+    }
+
+    &-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: #1D1D2E;
+        padding: 36px 20px 24px;
+        position: relative;
+        transition: all 0.3s ease;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            box-shadow: 0 4px 12.8px 0 rgba(255, 255, 255, 0.10) inset;
+            transition: all 0.3s ease;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            box-shadow: 0 4px 16.6px 0 rgba(255, 113, 191, 0.20), 0 4px 12.8px 0 rgba(255, 113, 191, 0.20) inset;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+
+            &::after {
+                opacity: 1;
+            }
+            &::before {
+                opacity: 0;
+            }
+        }
+
+        .title {
+            color: #A9B1E0;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+            text-align: center;
+        }
+    }
+}

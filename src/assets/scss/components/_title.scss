@@ -1,0 +1,50 @@
+@use "../default" as *;
+
+.lrn-section-title {
+    font-size: 80px;
+    font-weight: 700;
+    line-height: 1.1;
+    color:#D6DAF0;
+    margin: 0;
+
+    @media #{$xl-layout} {
+        font-size: 72px;
+    }
+
+    @media #{$lg-layout} {
+      font-size: 64px;
+    }
+
+    @media #{$md-layout} {
+      font-size: 48px;
+    }
+
+    @media #{$sm-layout} {
+      font-size: 36px;
+    }
+
+    .lrn-gradient-splite {
+      background: linear-gradient(
+        165.59deg,
+        #b26ef7 0%,
+        #ff71bf 46.5%,
+        #ffbd7a 100%
+      );
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+  }
+
+  .lrn-gradient-text {
+    background: linear-gradient(
+      165.59deg,
+      #b26ef7 0%,
+      #ff71bf 46.5%,
+      #ffbd7a 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
