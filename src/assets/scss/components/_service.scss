@@ -46,6 +46,11 @@
         padding: 36px 20px 24px;
         position: relative;
         transition: all 0.3s ease;
+
+        @media #{$large-mobile} {
+            padding: 25px 15px;
+            gap: 20px;
+        }
         
         &::before {
             content: '';

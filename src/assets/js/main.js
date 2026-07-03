@@ -893,11 +893,6 @@
         return;
       }
 
-      var mobileQuery = window.matchMedia("(max-width: 575px)");
-      if (mobileQuery.matches) {
-        return;
-      }
-
       var images = container.querySelectorAll(".header-img");
       if (!images.length) {
         return;
@@ -917,6 +912,10 @@
       var started = false;
       var mouse = null;
       var mouseConstraint = null;
+
+      function isCompact() {
+        return window.innerWidth <= 767;
+      }
 
       function getBounds() {
         return {
@@ -953,6 +952,23 @@
         ];
       }
 
+      function getImageDimensions(img, containerWidth) {
+        var maxWidth = containerWidth * (isCompact() ? 0.92 : 0.72);
+        var bodyWidth = img.naturalWidth || 200;
+        var bodyHeight = img.naturalHeight || 60;
+
+        if (bodyWidth > maxWidth) {
+          var scale = maxWidth / bodyWidth;
+          bodyWidth *= scale;
+          bodyHeight *= scale;
+        }
+
+        img.style.width = bodyWidth + "px";
+        img.style.height = "auto";
+
+        return { width: bodyWidth, height: bodyHeight };
+      }
+
       function syncDom() {
         pairs.forEach(function (pair) {
           var body = pair.body;
@@ -963,6 +979,12 @@
           el.style.transform =
             "translate(-50%, -50%) rotate(" + body.angle + "rad)";
         });
+      }
+
+      function releasePointer() {
+        if (mouseConstraint && mouseConstraint.mouse) {
+          mouseConstraint.mouse.button = -1;
+        }
       }
 
       function waitForImages(callback) {
@@ -1001,32 +1023,28 @@
         var walls = createWalls(width, height);
         Composite.add(engine.world, walls);
 
+        var spawnSpacing = isCompact() ? 65 : 110;
+
         Array.prototype.forEach.call(images, function (img, index) {
-          var rect = img.getBoundingClientRect();
-          var bodyWidth = rect.width || img.naturalWidth;
-          var bodyHeight = rect.height || img.naturalHeight;
-          var maxWidth = width * 0.72;
-
-          if (bodyWidth > maxWidth) {
-            var scale = maxWidth / bodyWidth;
-            bodyWidth *= scale;
-            bodyHeight *= scale;
-            img.style.width = bodyWidth + "px";
-            img.style.height = "auto";
-          }
-
+          var size = getImageDimensions(img, width);
           var spawnX =
             width * (0.18 + (index / Math.max(images.length - 1, 1)) * 0.64) +
-            (Math.random() - 0.5) * 50;
-          var spawnY = -90 - index * 110 - Math.random() * 70;
+            (Math.random() - 0.5) * (isCompact() ? 30 : 50);
+          var spawnY = -50 - index * spawnSpacing - Math.random() * 50;
 
-          var body = Bodies.rectangle(spawnX, spawnY, bodyWidth, bodyHeight, {
-            restitution: 0.45,
-            friction: 0.35,
-            frictionAir: 0.018,
-            density: 0.0018,
-            chamfer: { radius: 10 },
-          });
+          var body = Bodies.rectangle(
+            spawnX,
+            spawnY,
+            size.width,
+            size.height,
+            {
+              restitution: 0.45,
+              friction: 0.35,
+              frictionAir: 0.018,
+              density: 0.0018,
+              chamfer: { radius: isCompact() ? 6 : 10 },
+            },
+          );
 
           Composite.add(engine.world, body);
           pairs.push({ body: body, el: img });
@@ -1034,12 +1052,13 @@
 
         if (!mouse) {
           mouse = Mouse.create(container);
+          Mouse.setElement(mouse, container);
         }
 
         mouseConstraint = MouseConstraint.create(engine, {
           mouse: mouse,
           constraint: {
-            stiffness: 0.45,
+            stiffness: isCompact() ? 0.35 : 0.45,
             damping: 0.08,
           },
         });
@@ -1051,11 +1070,9 @@
           Runner.run(runner, engine);
           Events.on(engine, "afterUpdate", syncDom);
 
-          container.addEventListener("mouseleave", function () {
-            if (mouseConstraint.body) {
-              mouseConstraint.mouse.button = -1;
-            }
-          });
+          container.addEventListener("mouseleave", releasePointer);
+          container.addEventListener("touchend", releasePointer);
+          container.addEventListener("touchcancel", releasePointer);
         }
       }
 
@@ -1097,13 +1114,16 @@
 
       var resizeTimer;
       window.addEventListener("resize", function () {
-        if (!started || mobileQuery.matches) {
+        if (!started) {
           return;
         }
 
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-          waitForImages(buildWorld);
+          waitForImages(function () {
+            buildWorld();
+            syncDom();
+          });
         }, 250);
       });
     },
