@@ -212,10 +212,13 @@
 
     p {
       font-size: 18px;
-      color: var(--color-secondary-700);
+      color: #A9B1E0;
+      line-height: 32px;
+      font-weight: 400;
 
       @media #{$large-mobile} {
         font-size: 16px;
+        line-height: 24px;
       }
     }
   }

@@ -97,7 +97,7 @@
       .footer-1 {
         position: absolute;
         bottom: 400px;
-        left: 20px;
+        left: 30px;
         transition: 0.7s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         transform: translateX(50px);
 
@@ -107,8 +107,8 @@
       }
       .footer-2 {
         position: absolute;
-        bottom: 400px;
-        right: 40px;
+        bottom: 380px;
+        right: 60px;
         transition: 0.7s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         transform: translateX(-50px);
         transition-delay: 0.2s;
@@ -126,6 +126,7 @@
         transition: 0.7s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         transform: translateY(80px) translateX(-50%);
         transition-delay: 0.4s;
+        z-index: 2;
 
         @media #{$xl-layout} {
           bottom: 150px;
@@ -138,6 +139,7 @@
         transition: 0.7s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         transform: translateX(50px);
         transition-delay: 0.6s;
+        z-index: 3;
       }
       .footer-5 {
         position: absolute;
