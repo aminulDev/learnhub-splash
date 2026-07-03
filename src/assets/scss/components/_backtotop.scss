@@ -1,0 +1,72 @@
+@use "../default" as *;
+
+/*-------------------------
+    Back To Top  
+---------------------------*/
+.rbt-progress-parent {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  height: 46px;
+  width: 46px;
+  cursor: pointer;
+  display: block;
+  border-radius: 50px;
+  box-shadow: inset 0 0 0 2px rgba(from var(--color-secondary-100) r g b / 0.1);
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: all 200ms linear;
+
+  @media #{$sm-layout} {
+    right: 15px;
+  }
+
+  &.rbt-backto-top-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  &::after {
+    position: absolute;
+    font-family: "Font Awesome 6 Pro";
+    font-weight: 600;
+    content: "\f062";
+    text-align: center;
+    line-height: 46px;
+    font-size: 20px;
+    color: var(--color-primary-100);
+    left: 0;
+    top: 0;
+    height: 46px;
+    width: 46px;
+    cursor: pointer;
+    display: block;
+    z-index: 2;
+    transition: all 200ms linear;
+  }
+
+  &:hover {
+    &::after {
+      color: var(--color-primary-100);
+    }
+  }
+
+  svg {
+    path {
+      fill: none;
+    }
+
+    &.rbt-back-circle {
+      path {
+        stroke: var(--color-primary-100);
+        stroke-width: 4;
+        box-sizing: border-box;
+        transition: all 200ms linear;
+        opacity: 0.6;
+      }
+    }
+  }
+}

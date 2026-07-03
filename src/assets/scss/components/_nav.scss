@@ -246,6 +246,16 @@
             width: 600px;
             margin: inherit;
           }
+
+          &.common {
+            max-width: fit-content;
+            min-width: 648px;
+          }
+
+          &.elements {
+            max-width: fit-content;
+            min-width: 854px;
+          }
         }
 
         .single-mega-item {
@@ -290,7 +300,7 @@
   gap: 16px;
   background-color: #1A1A35;
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 10px;
+  border-radius: 24px;
   padding: 24px;
   position: relative;
 
@@ -434,7 +444,7 @@
   gap: 16px;
   background-color: #1A1A35;
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 10px;
+  border-radius: 24px;
   padding: 24px;
   position: relative;
   overflow: hidden;
@@ -455,8 +465,8 @@
 .lrn-elements-menu-wrapper {
   background-color: #1A1A35;
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 10px;
-  padding: 24px;
+  border-radius: 24px;
+  padding: 10px;
   position: relative;
   overflow: hidden;
   max-width: 854px;
@@ -466,8 +476,8 @@
 .lrn-common-menu-wrapper {
   background-color: #1A1A35;
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 10px;
-  padding: 24px;
+  border-radius: 24px;
+  padding: 10px;
   position: relative;
   overflow: hidden;
   max-width: 648px;
