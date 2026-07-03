@@ -24,12 +24,14 @@
     }
 
     .lrn-gradient-splite {
-      background: linear-gradient(
-        165.59deg,
-        #b26ef7 0%,
-        #ff71bf 46.5%,
-        #ffbd7a 100%
-      );
+      background: linear-gradient(90deg, #9E7AFF 0%, #FE8BBB 32%, #FFBD7A 65.5%, #FEE398 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lrn-gradient-text-2 {
+      background:  linear-gradient(114deg, #B26EF7 0%, #FF71BF 46.5%, #FFBD7A 100%);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;

@@ -91,10 +91,10 @@
       }
 
       const heroGradientText = document.querySelector(
-        ".lrn-splash-hero .lrn-hero-title-text"
+        ".lrn-splash-hero .lrn-hero-title-text",
       );
       const heroTitles = Array.from(
-        document.querySelectorAll(".lrn-splash-hero-slider .swiper-slide")
+        document.querySelectorAll(".lrn-splash-hero-slider .swiper-slide"),
       ).map((slide) => slide.dataset.heroTitle);
 
       let heroTitleTimeline = null;
@@ -177,7 +177,7 @@
                 each: 0.03,
                 from: "start",
               },
-            }
+            },
           );
         };
 
@@ -215,49 +215,49 @@
       new Swiper(".lrn-splash-hero-slider", {
         effect: "coverflow",
         grabCursor: true,
+        slidesPerView: 'auto',
         centeredSlides: true,
-        centerInsufficientSlides: true,
         loop: true,
-        loopAdditionalSlides: 2,
-        slidesPerView: "auto",
-        spaceBetween: -50,
-        speed: 700,
+        spaceBetween: 0,
         watchSlidesProgress: true,
-        slideToClickedSlide: true,
+        speed: 700,
         autoplay: {
           delay: 3500,
           disableOnInteraction: false,
         },
         coverflowEffect: {
-          rotate: 24,
-          stretch: 0,
-          depth: 200,
-          modifier: 2,
           slideShadows: false,
+          rotate: 0,
+          stretch: 0,
+          depth: 0,
+          modifier: 1,
         },
         breakpoints: {
-          320: {
-            spaceBetween: -25,
+          576: {
+            spaceBetween: -150,
             coverflowEffect: {
-              rotate: 18,
-              depth: 120,
-              modifier: 1.6,
+              rotate: 0,
+              stretch: -100,
+              depth: 100,
+              modifier: 1,
             },
           },
           768: {
-            spaceBetween: -35,
+            spaceBetween: -150,
             coverflowEffect: {
-              rotate: 20,
-              depth: 160,
-              modifier: 1.8,
+              rotate: 0,
+              stretch: -120,
+              depth: 105,
+              modifier: 1,
             },
           },
           1200: {
-            spaceBetween: -50,
+            spaceBetween: -180,
             coverflowEffect: {
-              rotate: 24,
-              depth: 200,
-              modifier: 2,
+              rotate: 0,
+              stretch: -120,
+              depth: 120,
+              modifier: 1,
             },
           },
         },
@@ -269,7 +269,8 @@
             updateHeroTitle(swiper);
           },
           progress(swiper) {
-            const visibleRadius = window.innerWidth < 768 ? 1 : 2;
+            const visibleRadius = window.innerWidth < 768 ? 1.4 : 3.2;
+            const edgePullBase = window.innerWidth < 768 ? 120 : 210;
 
             swiper.slides.forEach((slideEl) => {
               const distance = Math.abs(slideEl.progress);
@@ -277,13 +278,21 @@
               slideEl.classList.remove(
                 "is-hero-near",
                 "is-hero-far",
-                "is-hero-hidden"
+                "is-hero-hidden",
               );
+              slideEl.style.removeProperty("--hero-edge-pull");
+              slideEl.style.removeProperty("--hero-edge-dir");
 
               if (distance > visibleRadius + 0.35) {
                 slideEl.classList.add("is-hero-hidden");
               } else if (distance > 1.15) {
                 slideEl.classList.add("is-hero-far");
+                const pull =
+                  edgePullBase + Math.min(distance - 1.15, 1) * 90;
+                const direction = slideEl.progress > 0 ? -1 : 1;
+
+                slideEl.style.setProperty("--hero-edge-pull", `${pull}px`);
+                slideEl.style.setProperty("--hero-edge-dir", `${direction}`);
               } else if (distance > 0.15) {
                 slideEl.classList.add("is-hero-near");
               }
@@ -347,8 +356,7 @@
           if (gradientSplit.chars.length) {
             gsap.set(gradientSplit.chars, {
               color: (i, t, chars) => {
-                const progress =
-                  chars.length > 1 ? i / (chars.length - 1) : 0;
+                const progress = chars.length > 1 ? i / (chars.length - 1) : 0;
                 return getGradientColor(progress);
               },
             });
@@ -375,7 +383,7 @@
 
       const initTrack = (track) => {
         const cards = track.querySelectorAll(
-          ".lrn-review-card:not(.lrn-review-card--clone)"
+          ".lrn-review-card:not(.lrn-review-card--clone)",
         );
 
         track.querySelectorAll(".lrn-review-card--clone").forEach((clone) => {
@@ -428,7 +436,7 @@
       }
 
       var prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
+        "(prefers-reduced-motion: reduce)",
       ).matches;
 
       if (prefersReducedMotion) {
@@ -454,10 +462,12 @@
             scale: 1,
             duration: 0.8,
             ease: "power3.out",
-          }
+          },
         );
 
-        if (card.classList.contains("lrn-splash-why-choose-card--performance")) {
+        if (
+          card.classList.contains("lrn-splash-why-choose-card--performance")
+        ) {
           var scoreWrap = card.querySelector(".score-wrap");
           var scoreBadge = card.querySelector(".score-badge");
           var cardTitle = card.querySelector(".card-title");
@@ -466,29 +476,35 @@
           if (scoreWrap) {
             cardTl.from(
               scoreWrap,
-              { scale: 0.4, rotation: -120, autoAlpha: 0, duration: 0.75, ease: "back.out(1.5)" },
-              "-=0.45"
+              {
+                scale: 0.4,
+                rotation: -120,
+                autoAlpha: 0,
+                duration: 0.75,
+                ease: "back.out(1.5)",
+              },
+              "-=0.45",
             );
           }
           if (scoreBadge) {
             cardTl.from(
               scoreBadge,
               { scale: 0, autoAlpha: 0, duration: 0.45, ease: "back.out(2.2)" },
-              "-=0.55"
+              "-=0.55",
             );
           }
           if (cardTitle) {
             cardTl.from(
               cardTitle,
               { y: 24, autoAlpha: 0, duration: 0.55, ease: "power2.out" },
-              "-=0.35"
+              "-=0.35",
             );
           }
           if (cardBg) {
             cardTl.from(
               cardBg,
               { y: 40, autoAlpha: 0, duration: 0.85, ease: "power2.out" },
-              "-=0.75"
+              "-=0.75",
             );
           }
         }
@@ -502,21 +518,21 @@
             cardTl.from(
               supportImg,
               { scale: 1.12, autoAlpha: 0, duration: 0.9, ease: "power2.out" },
-              "-=0.55"
+              "-=0.55",
             );
           }
           if (supportOverlay) {
             cardTl.from(
               supportOverlay,
               { autoAlpha: 0, duration: 0.6, ease: "power1.out" },
-              "-=0.7"
+              "-=0.7",
             );
           }
           if (supportTitle) {
             cardTl.from(
               supportTitle,
               { autoAlpha: 0, duration: 0.6, ease: "power2.out" },
-              "-=0.35"
+              "-=0.35",
             );
           }
         }
@@ -530,21 +546,27 @@
             cardTl.from(
               designBg,
               { scale: 1.08, autoAlpha: 0, duration: 0.85, ease: "power2.out" },
-              "-=0.55"
+              "-=0.55",
             );
           }
           if (lightning) {
             cardTl.from(
               lightning,
-              { scale: 0, rotation: -30, autoAlpha: 0, duration: 0.55, ease: "back.out(2)" },
-              "-=0.45"
+              {
+                scale: 0,
+                rotation: -30,
+                autoAlpha: 0,
+                duration: 0.55,
+                ease: "back.out(2)",
+              },
+              "-=0.45",
             );
           }
           if (designTitle) {
             cardTl.from(
               designTitle,
               { x: 32, autoAlpha: 0, duration: 0.55, ease: "power2.out" },
-              "-=0.35"
+              "-=0.35",
             );
           }
         }
@@ -558,21 +580,21 @@
             cardTl.from(
               mobileImg,
               { y: 36, autoAlpha: 0, duration: 0.75, ease: "power2.out" },
-              "-=0.45"
+              "-=0.45",
             );
           }
           if (cardLabel) {
             cardTl.from(
               cardLabel,
               { y: 16, autoAlpha: 0, duration: 0.45, ease: "power2.out" },
-              "-=0.35"
+              "-=0.35",
             );
           }
           if (mobileTitle) {
             cardTl.from(
               mobileTitle,
               { y: 20, autoAlpha: 0, duration: 0.5, ease: "power2.out" },
-              "-=0.3"
+              "-=0.3",
             );
           }
         }
@@ -587,28 +609,34 @@
             cardTl.from(
               gridLines,
               { autoAlpha: 0, duration: 0.7, ease: "power1.out" },
-              "-=0.5"
+              "-=0.5",
             );
           }
           if (windowDots) {
             cardTl.from(
               windowDots,
               { y: -12, autoAlpha: 0, duration: 0.45, ease: "power2.out" },
-              "-=0.55"
+              "-=0.55",
             );
           }
           if (brandLogo) {
             cardTl.from(
               brandLogo,
               { y: -20, autoAlpha: 0, duration: 0.6, ease: "power2.out" },
-              "-=0.35"
+              "-=0.35",
             );
           }
           if (brandItems.length) {
             cardTl.from(
               brandItems,
-              { x: -16, autoAlpha: 0, duration: 0.45, ease: "power2.out", stagger: 0.1 },
-              "-=0.25"
+              {
+                x: -16,
+                autoAlpha: 0,
+                duration: 0.45,
+                ease: "power2.out",
+                stagger: 0.1,
+              },
+              "-=0.25",
             );
           }
         }
@@ -622,21 +650,26 @@
             cardTl.from(
               elementsBg,
               { scale: 1.1, autoAlpha: 0, duration: 0.8, ease: "power2.out" },
-              "-=0.5"
+              "-=0.5",
             );
           }
           if (countEl) {
             cardTl.from(
               countEl,
-              { scale: 0.6, autoAlpha: 0, duration: 0.55, ease: "back.out(1.6)" },
-              "-=0.4"
+              {
+                scale: 0.6,
+                autoAlpha: 0,
+                duration: 0.55,
+                ease: "back.out(1.6)",
+              },
+              "-=0.4",
             );
           }
           if (elementsTitle) {
             cardTl.from(
               elementsTitle,
               { y: 18, autoAlpha: 0, duration: 0.5, ease: "power2.out" },
-              "-=0.25"
+              "-=0.25",
             );
           }
         }
@@ -646,7 +679,8 @@
         });
       });
 
-      var grid = section.querySelector(".lrn-splash-why-choose-grid") || section;
+      var grid =
+        section.querySelector(".lrn-splash-why-choose-grid") || section;
 
       ScrollTrigger.create({
         trigger: grid,
@@ -721,7 +755,10 @@
 
       sources.some(function (source, index) {
         var initialSrc = featuredImg.getAttribute("src") || "";
-        if (initialSrc === source.src || featuredImg.src.indexOf(source.src) !== -1) {
+        if (
+          initialSrc === source.src ||
+          featuredImg.src.indexOf(source.src) !== -1
+        ) {
           currentIndex = index;
           return true;
         }
@@ -754,7 +791,7 @@
             y: 0,
             duration: 0.8,
             ease: "power3.out",
-          }
+          },
         );
       }
 
@@ -787,7 +824,7 @@
       }
 
       var prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
+        "(prefers-reduced-motion: reduce)",
       ).matches;
       var isTouch = window.matchMedia("(hover: none)").matches;
 
@@ -824,7 +861,8 @@
         });
 
         card.addEventListener("mouseleave", function () {
-          card.style.transition = "transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)";
+          card.style.transition =
+            "transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)";
           card.style.transform =
             "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
         });
@@ -854,18 +892,18 @@
       $(".close-button").on("click", function () {
         $(".popup-mobile-menu").removeClass("active");
         $(
-          ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a"
+          ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a",
         )
           .siblings(".submenu, .lrn-megamenu")
           .removeClass("active")
           .slideUp("400");
         $(
-          ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a"
+          ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a",
         ).removeClass("open");
       });
 
       $(
-        ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a"
+        ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a",
       ).on("click", function (e) {
         e.preventDefault();
         $(this)
@@ -881,15 +919,15 @@
           e.target === this &&
             $(".popup-mobile-menu").removeClass("active") &&
             $(
-              ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a"
+              ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a",
             )
               .siblings(".submenu, .lrn-megamenu")
               .removeClass("active")
               .slideUp("400") &&
             $(
-              ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a"
+              ".popup-mobile-menu .mainmenu .has-dropdown > a, .popup-mobile-menu .mainmenu .with-megamenu > a, .popup-mobile-menu .mainmenu .has-menu-child-item > a, .popup-mobile-menu .mainmenu .has-menu-childitem > a",
             ).removeClass("open");
-        }
+        },
       );
     },
   };
