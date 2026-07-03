@@ -2,6 +2,12 @@
   "use strict";
 
   var lernhub = {
+    _heroGradientStops: [
+      { stop: 0, color: "#b26ef7" },
+      { stop: 0.465, color: "#ff71bf" },
+      { stop: 1, color: "#ffbd7a" },
+    ],
+
     i: function () {
       lernhub.d();
       lernhub.methods();
@@ -40,6 +46,35 @@
       return true;
     },
 
+    getHeroGradientColor: function (t) {
+      const stops = lernhub._heroGradientStops;
+
+      for (let i = 0; i < stops.length - 1; i++) {
+        const current = stops[i];
+        const next = stops[i + 1];
+
+        if (t >= current.stop && t <= next.stop) {
+          const localT = (t - current.stop) / (next.stop - current.stop);
+          return gsap.utils.interpolate(current.color, next.color)(localT);
+        }
+      }
+
+      return stops[stops.length - 1].color;
+    },
+
+    applyHeroCharGradient: function (chars) {
+      if (!chars.length) {
+        return;
+      }
+
+      gsap.set(chars, {
+        color: (i, t, allChars) => {
+          const progress = allChars.length > 1 ? i / (allChars.length - 1) : 0;
+          return lernhub.getHeroGradientColor(progress);
+        },
+      });
+    },
+
     headerSticky: function () {
       $(window).scroll(function () {
         if ($(this).scrollTop() > 250) {
@@ -54,6 +89,128 @@
       if (!$(".lrn-splash-hero-slider").length) {
         return;
       }
+
+      const heroGradientText = document.querySelector(
+        ".lrn-splash-hero .lrn-hero-title-text"
+      );
+      const heroTitles = Array.from(
+        document.querySelectorAll(".lrn-splash-hero-slider .swiper-slide")
+      ).map((slide) => slide.dataset.heroTitle);
+
+      let heroTitleTimeline = null;
+      let heroTitleSplit = null;
+      let currentHeroTitle = "";
+      const hasHeroAnimation =
+        lernhub.initGsap() && typeof SplitText !== "undefined";
+
+      if (hasHeroAnimation) {
+        gsap.registerPlugin(SplitText);
+      }
+
+      const revertHeroTitleSplit = () => {
+        if (heroTitleSplit) {
+          heroTitleSplit.revert();
+          heroTitleSplit = null;
+        }
+      };
+
+      const splitHeroTitle = () => {
+        revertHeroTitleSplit();
+        heroTitleSplit = new SplitText(heroGradientText, {
+          type: "chars",
+          charsClass: "hero-char",
+        });
+        lernhub.applyHeroCharGradient(heroTitleSplit.chars);
+        return heroTitleSplit.chars;
+      };
+
+      const animateHeroTitle = (title, isInitial = false) => {
+        if (!heroGradientText || !title) {
+          return;
+        }
+
+        if (title === currentHeroTitle && !isInitial) {
+          return;
+        }
+
+        if (heroTitleTimeline) {
+          heroTitleTimeline.kill();
+          heroTitleTimeline = null;
+
+          if (heroTitleSplit) {
+            revertHeroTitleSplit();
+            heroGradientText.textContent = currentHeroTitle;
+          }
+        }
+
+        if (!hasHeroAnimation) {
+          heroGradientText.textContent = title;
+          currentHeroTitle = title;
+          return;
+        }
+
+        const playIn = () => {
+          revertHeroTitleSplit();
+          heroGradientText.textContent = title;
+          currentHeroTitle = title;
+
+          const chars = splitHeroTitle();
+          if (!chars.length) {
+            return;
+          }
+
+          heroTitleTimeline = gsap.fromTo(
+            chars,
+            {
+              yPercent: 110,
+              opacity: 0,
+              rotateX: -45,
+              transformOrigin: "50% 100%",
+            },
+            {
+              yPercent: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: isInitial ? 0.8 : 0.6,
+              ease: "power3.out",
+              stagger: {
+                each: 0.03,
+                from: "start",
+              },
+            }
+          );
+        };
+
+        const canAnimateOut =
+          !isInitial &&
+          heroTitleSplit?.chars?.length &&
+          currentHeroTitle &&
+          currentHeroTitle !== title;
+
+        if (canAnimateOut) {
+          heroTitleTimeline = gsap.to(heroTitleSplit.chars, {
+            yPercent: -110,
+            opacity: 0,
+            rotateX: 45,
+            transformOrigin: "50% 0%",
+            duration: 0.35,
+            ease: "power3.in",
+            stagger: {
+              each: 0.02,
+              from: "end",
+            },
+            onComplete: playIn,
+          });
+          return;
+        }
+
+        playIn();
+      };
+
+      const updateHeroTitle = (swiper, isInitial = false) => {
+        const title = heroTitles[swiper.realIndex];
+        animateHeroTitle(title, isInitial);
+      };
 
       new Swiper(".lrn-splash-hero-slider", {
         effect: "coverflow",
@@ -105,6 +262,12 @@
           },
         },
         on: {
+          init(swiper) {
+            updateHeroTitle(swiper, true);
+          },
+          slideChangeTransitionStart(swiper) {
+            updateHeroTitle(swiper);
+          },
           progress(swiper) {
             const visibleRadius = window.innerWidth < 768 ? 1 : 2;
 

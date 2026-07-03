@@ -87,6 +87,23 @@
         font-size: 32px !important;
       }
     }
+
+    .lrn-hero-title-wrap {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
+      perspective: 900px;
+    }
+
+    .lrn-hero-title-text {
+      display: inline-block;
+
+      .hero-char {
+        display: inline-block;
+        will-change: transform, opacity;
+        -webkit-text-fill-color: currentColor;
+      }
+    }
   }
 
   .lrn-splash-badge {
