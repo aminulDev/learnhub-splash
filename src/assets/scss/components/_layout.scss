@@ -66,6 +66,47 @@
       &:before {
         right: 200px;
       }
+
+      .layout-image--matter {
+        position: relative;
+        overflow: hidden;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+
+        &:active {
+          cursor: grabbing;
+        }
+
+        .header-img {
+          position: absolute;
+          left: 0;
+          top: 0;
+          right: auto;
+          bottom: auto;
+          margin: 0;
+          opacity: 0;
+          transition: none !important;
+          transform-origin: center center;
+          pointer-events: none;
+          will-change: left, top, transform;
+          z-index: 1;
+        }
+
+        &.is-matter-ready {
+          .header-img {
+            opacity: 1;
+          }
+          .header-1,
+          .header-2,
+          .header-3,
+          .header-4,
+          .header-5,
+          .header-6 {
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
     }
 
     .lines {

@@ -28,6 +28,7 @@
       lernhub.odometerCounter();
       lernhub.whyChooseAnimation();
       lernhub.layoutScrollActive();
+      lernhub.headerLayoutMatter();
       lernhub.reviewMarquee();
       lernhub.galleryAnimation();
       lernhub.demoCardTilt();
@@ -881,6 +882,229 @@
           toggleClass: "active",
           once: true,
         });
+      });
+    },
+
+    headerLayoutMatter: function () {
+      var container = document.querySelector(
+        ".header-style .layout-image--matter",
+      );
+      if (!container || typeof Matter === "undefined") {
+        return;
+      }
+
+      var mobileQuery = window.matchMedia("(max-width: 575px)");
+      if (mobileQuery.matches) {
+        return;
+      }
+
+      var images = container.querySelectorAll(".header-img");
+      if (!images.length) {
+        return;
+      }
+
+      var Engine = Matter.Engine;
+      var Runner = Matter.Runner;
+      var Bodies = Matter.Bodies;
+      var Composite = Matter.Composite;
+      var Mouse = Matter.Mouse;
+      var MouseConstraint = Matter.MouseConstraint;
+      var Events = Matter.Events;
+
+      var engine = Engine.create({ gravity: { x: 0, y: 1.1 } });
+      var runner = null;
+      var pairs = [];
+      var started = false;
+      var mouse = null;
+      var mouseConstraint = null;
+
+      function getBounds() {
+        return {
+          width: container.offsetWidth,
+          height: container.offsetHeight,
+        };
+      }
+
+      function createWalls(width, height) {
+        var thickness = 120;
+
+        return [
+          Bodies.rectangle(
+            width / 2,
+            height + thickness / 2,
+            width + thickness * 2,
+            thickness,
+            { isStatic: true, label: "ground" },
+          ),
+          Bodies.rectangle(
+            -thickness / 2,
+            height / 2,
+            thickness,
+            height * 2,
+            { isStatic: true, label: "left-wall" },
+          ),
+          Bodies.rectangle(
+            width + thickness / 2,
+            height / 2,
+            thickness,
+            height * 2,
+            { isStatic: true, label: "right-wall" },
+          ),
+        ];
+      }
+
+      function syncDom() {
+        pairs.forEach(function (pair) {
+          var body = pair.body;
+          var el = pair.el;
+
+          el.style.left = body.position.x + "px";
+          el.style.top = body.position.y + "px";
+          el.style.transform =
+            "translate(-50%, -50%) rotate(" + body.angle + "rad)";
+        });
+      }
+
+      function waitForImages(callback) {
+        var loaded = 0;
+        var total = images.length;
+
+        function checkDone() {
+          loaded += 1;
+          if (loaded >= total) {
+            callback();
+          }
+        }
+
+        Array.prototype.forEach.call(images, function (img) {
+          if (img.complete && img.naturalWidth) {
+            checkDone();
+          } else {
+            img.addEventListener("load", checkDone, { once: true });
+            img.addEventListener("error", checkDone, { once: true });
+          }
+        });
+      }
+
+      function buildWorld() {
+        var bounds = getBounds();
+        var width = bounds.width;
+        var height = bounds.height;
+
+        if (!width || !height) {
+          return;
+        }
+
+        pairs = [];
+        Composite.clear(engine.world, false);
+
+        var walls = createWalls(width, height);
+        Composite.add(engine.world, walls);
+
+        Array.prototype.forEach.call(images, function (img, index) {
+          var rect = img.getBoundingClientRect();
+          var bodyWidth = rect.width || img.naturalWidth;
+          var bodyHeight = rect.height || img.naturalHeight;
+          var maxWidth = width * 0.72;
+
+          if (bodyWidth > maxWidth) {
+            var scale = maxWidth / bodyWidth;
+            bodyWidth *= scale;
+            bodyHeight *= scale;
+            img.style.width = bodyWidth + "px";
+            img.style.height = "auto";
+          }
+
+          var spawnX =
+            width * (0.18 + (index / Math.max(images.length - 1, 1)) * 0.64) +
+            (Math.random() - 0.5) * 50;
+          var spawnY = -90 - index * 110 - Math.random() * 70;
+
+          var body = Bodies.rectangle(spawnX, spawnY, bodyWidth, bodyHeight, {
+            restitution: 0.45,
+            friction: 0.35,
+            frictionAir: 0.018,
+            density: 0.0018,
+            chamfer: { radius: 10 },
+          });
+
+          Composite.add(engine.world, body);
+          pairs.push({ body: body, el: img });
+        });
+
+        if (!mouse) {
+          mouse = Mouse.create(container);
+        }
+
+        mouseConstraint = MouseConstraint.create(engine, {
+          mouse: mouse,
+          constraint: {
+            stiffness: 0.45,
+            damping: 0.08,
+          },
+        });
+
+        Composite.add(engine.world, mouseConstraint);
+
+        if (!runner) {
+          runner = Runner.create();
+          Runner.run(runner, engine);
+          Events.on(engine, "afterUpdate", syncDom);
+
+          container.addEventListener("mouseleave", function () {
+            if (mouseConstraint.body) {
+              mouseConstraint.mouse.button = -1;
+            }
+          });
+        }
+      }
+
+      function start() {
+        if (started) {
+          return;
+        }
+
+        started = true;
+
+        waitForImages(function () {
+          buildWorld();
+          syncDom();
+          container.classList.add("is-matter-ready");
+        });
+      }
+
+      if (lernhub.initGsap()) {
+        ScrollTrigger.create({
+          trigger: container.closest(".lrn-layout-item"),
+          start: "top 80%",
+          once: true,
+          onEnter: start,
+        });
+      } else if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            if (entries[0].isIntersecting) {
+              start();
+              observer.disconnect();
+            }
+          },
+          { threshold: 0.2 },
+        );
+        observer.observe(container.closest(".lrn-layout-item"));
+      } else {
+        start();
+      }
+
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        if (!started || mobileQuery.matches) {
+          return;
+        }
+
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          waitForImages(buildWorld);
+        }, 250);
       });
     },
 
