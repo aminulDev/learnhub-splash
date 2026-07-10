@@ -54,15 +54,20 @@
     display: block;
     width: auto;
     height: auto;
-    border-radius: 12px;
+    border-radius: 16px;
     opacity: 0.45;
     filter: blur(6px);
     z-index: 1;
     pointer-events: none;
-    will-change: transform;
+    transform-origin: center center;
+    will-change: transform, filter, opacity;
+
+    &.is-featured {
+      z-index: 10;
+      pointer-events: none;
+    }
 
     @media #{$sm-layout} {
-      border-radius: 8px;
       filter: blur(4px);
     }
   }
@@ -71,17 +76,18 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    max-width: 645px;
+    width: min(645px, 72%);
     transform: translate(-50%, -50%);
-    z-index: 5;
+    z-index: 0;
     pointer-events: none;
+    visibility: hidden;
 
     @media #{$md-layout} {
-      max-width: 540px;
+      width: min(540px, 78%);
     }
 
     @media #{$sm-layout} {
-      max-width: 480px;
+      width: min(480px, 86%);
     }
   }
 
@@ -90,12 +96,6 @@
     width: 100%;
     height: auto;
     border-radius: 16px;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-    will-change: transform, opacity;
-
-    @media #{$sm-layout} {
-      border-radius: 10px;
-    }
   }
 
   .gallery-1 {
@@ -128,7 +128,7 @@
     left: 50%;
     top: 2%;
     width: 18%;
-    transform: translateX(-50%);
+    translate: -50% 0;
 
     @media #{$md-layout} {
       width: 22%;
@@ -198,7 +198,7 @@
 
   .gallery-8 {
     left: 50%;
-    transform: translateX(-50%);
+    translate: -50% 0;
     bottom: 10%;
     width: 10%;
   }

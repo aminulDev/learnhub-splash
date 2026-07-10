@@ -745,80 +745,222 @@
         return;
       }
 
+      var featuredFrame = stage.querySelector(".lrn-gallery-featured");
       var featuredImg = stage.querySelector(".lrn-gallery-featured-img");
-      var scatterItems = stage.querySelectorAll(".lrn-gallery-scatter");
-      if (!featuredImg || !scatterItems.length) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".lrn-gallery-scatter"),
+      );
+
+      if (!featuredFrame || !items.length) {
         return;
       }
 
-      var sources = Array.prototype.map.call(scatterItems, function (img) {
-        return {
-          src: img.getAttribute("src"),
-          alt: img.getAttribute("alt"),
-        };
-      });
+      if (featuredImg) {
+        gsap.set(featuredImg, { autoAlpha: 0 });
+      }
 
-      var currentIndex = -1;
-      var changeEvery = 4000;
+      var reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      var currentIndex = 0;
+      var isAnimating = false;
+      var holdMs = 3200;
+      var moveDuration = 1.1;
+      var cycleTimer = null;
 
-      sources.some(function (source, index) {
+      if (featuredImg) {
         var initialSrc = featuredImg.getAttribute("src") || "";
-        if (
-          initialSrc === source.src ||
-          featuredImg.src.indexOf(source.src) !== -1
-        ) {
-          currentIndex = index;
-          return true;
-        }
-        return false;
-      });
-
-      gsap.set(featuredImg, { opacity: 1, y: 0 });
-
-      function getNextIndex() {
-        if (sources.length < 2) {
-          return 0;
-        }
-
-        return (currentIndex + 1) % sources.length;
+        items.some(function (img, index) {
+          var src = img.getAttribute("src") || "";
+          if (
+            initialSrc === src ||
+            featuredImg.src.indexOf(src) !== -1
+          ) {
+            currentIndex = index;
+            return true;
+          }
+          return false;
+        });
       }
 
-      function revealFeatured(next) {
-        featuredImg.src = next.src;
-        featuredImg.alt = next.alt;
+      function getCenterTarget(el) {
+        var frame = featuredFrame.getBoundingClientRect();
+        var rect = el.getBoundingClientRect();
+        var currentX = Number(gsap.getProperty(el, "x")) || 0;
+        var currentY = Number(gsap.getProperty(el, "y")) || 0;
+        var currentScale = Number(gsap.getProperty(el, "scale")) || 1;
+        var elCenterX = rect.left + rect.width / 2;
+        var elCenterY = rect.top + rect.height / 2;
+        var frameCenterX = frame.left + frame.width / 2;
+        var frameCenterY = frame.top + frame.height / 2;
 
-        gsap.fromTo(
-          featuredImg,
-          { opacity: 0, y: 100 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-          },
-        );
+        return {
+          x: currentX + (frameCenterX - elCenterX),
+          y: currentY + (frameCenterY - elCenterY),
+          scale: currentScale * (frame.width / Math.max(rect.width, 1)),
+        };
       }
 
-      function updateFeatured() {
-        gsap.killTweensOf(featuredImg);
+      function featuredProps(el) {
+        var target = getCenterTarget(el);
+        var radius = 16 / Math.max(target.scale, 0.001);
 
-        var nextIndex = getNextIndex();
-        var next = sources[nextIndex];
-        currentIndex = nextIndex;
+        return {
+          x: target.x,
+          y: target.y,
+          scale: target.scale,
+          opacity: 1,
+          filter: "blur(0px)",
+          zIndex: 10,
+          borderRadius: radius + "px",
+          boxShadow: "0 24px 80px rgba(0, 0, 0, 0.55)",
+        };
+      }
 
-        gsap.to(featuredImg, {
-          opacity: 0,
-          y: 50,
-          duration: 0.35,
-          ease: "power2.in",
+      function scatterProps() {
+        return {
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 0.45,
+          filter: "blur(6px)",
+          zIndex: 1,
+          borderRadius: "16px",
+          boxShadow: "none",
+        };
+      }
+
+      function placeAtCenter(el, animate) {
+        var props = featuredProps(el);
+        el.classList.add("is-featured");
+
+        if (!animate) {
+          gsap.set(el, props);
+          return null;
+        }
+
+        return Object.assign({}, props, {
+          duration: moveDuration,
+          ease: "power3.inOut",
+        });
+      }
+
+      function returnToScatter(el, animate) {
+        var props = scatterProps();
+
+        if (!animate) {
+          gsap.set(el, props);
+          el.classList.remove("is-featured");
+          return null;
+        }
+
+        return Object.assign({}, props, {
+          duration: moveDuration,
+          ease: "power3.inOut",
           onComplete: function () {
-            gsap.set(featuredImg, { y: 0 });
-            revealFeatured(next);
+            el.classList.remove("is-featured");
           },
         });
       }
 
-      window.setInterval(updateFeatured, changeEvery);
+      function showIndex(index, animate) {
+        var next = items[index];
+        if (!next) {
+          return;
+        }
+
+        currentIndex = index;
+        var props = placeAtCenter(next, animate);
+
+        if (props) {
+          gsap.to(next, props);
+        }
+      }
+
+      function cycleNext() {
+        if (isAnimating || items.length < 2) {
+          return;
+        }
+
+        isAnimating = true;
+        var prev = items[currentIndex];
+        var nextIndex = (currentIndex + 1) % items.length;
+        var next = items[nextIndex];
+
+        gsap.killTweensOf([prev, next]);
+        next.classList.add("is-featured");
+
+        var tl = gsap.timeline({
+          onComplete: function () {
+            currentIndex = nextIndex;
+            isAnimating = false;
+            scheduleCycle();
+          },
+        });
+
+        tl.to(prev, returnToScatter(prev, true), 0);
+        tl.to(next, placeAtCenter(next, true), 0.12);
+      }
+
+      function scheduleCycle() {
+        window.clearTimeout(cycleTimer);
+        if (reducedMotion || items.length < 2) {
+          return;
+        }
+        cycleTimer = window.setTimeout(cycleNext, holdMs);
+      }
+
+      function syncFeaturedPosition() {
+        if (isAnimating) {
+          return;
+        }
+
+        var active = items[currentIndex];
+        if (!active) {
+          return;
+        }
+
+        gsap.set(active, featuredProps(active));
+      }
+
+      gsap.set(items, scatterProps());
+
+      function startGallery() {
+        if (reducedMotion) {
+          showIndex(currentIndex, false);
+          return;
+        }
+
+        window.requestAnimationFrame(function () {
+          showIndex(currentIndex, true);
+          scheduleCycle();
+        });
+      }
+
+      var pending = items.filter(function (img) {
+        return !(img.complete && img.naturalWidth);
+      });
+
+      if (!pending.length) {
+        startGallery();
+      } else {
+        var loaded = 0;
+        pending.forEach(function (img) {
+          var done = function () {
+            loaded += 1;
+            if (loaded >= pending.length) {
+              startGallery();
+            }
+          };
+          img.addEventListener("load", done, { once: true });
+          img.addEventListener("error", done, { once: true });
+        });
+      }
+
+      window.addEventListener("resize", function () {
+        window.clearTimeout(stage._galleryResizeTimer);
+        stage._galleryResizeTimer = window.setTimeout(syncFeaturedPosition, 120);
+      });
     },
 
     serviceIllustrationAnimation: function () {
