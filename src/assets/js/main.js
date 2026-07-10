@@ -771,11 +771,7 @@
           return 0;
         }
 
-        var index;
-        do {
-          index = Math.floor(Math.random() * sources.length);
-        } while (index === currentIndex);
-        return index;
+        return (currentIndex + 1) % sources.length;
       }
 
       function revealFeatured(next) {

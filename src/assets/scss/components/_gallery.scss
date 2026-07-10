@@ -71,17 +71,17 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 52%;
+    max-width: 645px;
     transform: translate(-50%, -50%);
     z-index: 5;
     pointer-events: none;
 
     @media #{$md-layout} {
-      width: 62%;
+      max-width: 540px;
     }
 
     @media #{$sm-layout} {
-      width: 78%;
+      max-width: 480px;
     }
   }
 
