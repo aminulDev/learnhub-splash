@@ -1,5 +1,64 @@
 @use "../default" as *;
 
+@keyframes layoutFooterFloat1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(8px, -22px, 0) rotate(1.5deg);
+  }
+}
+
+@keyframes layoutFooterFloat2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(-10px, -18px, 0) rotate(-1.2deg);
+  }
+}
+
+@keyframes layoutFooterFloat3 {
+  0%,
+  100% {
+    transform: translate3d(-50%, 0, 0) rotate(0deg);
+  }
+
+  33% {
+    transform: translate3d(-50%, -26px, 0) rotate(0.8deg);
+  }
+
+  66% {
+    transform: translate3d(calc(-50% + 6px), -12px, 0) rotate(-0.6deg);
+  }
+}
+
+@keyframes layoutFooterFloat4 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(6px, -20px, 0) rotate(-1.8deg);
+  }
+}
+
+@keyframes layoutFooterFloat5 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(-8px, -24px, 0) rotate(1.2deg);
+  }
+}
+
 .lrn-layout {
   &-wrap {
     max-width: 1920px;
@@ -294,22 +353,49 @@
       .layout-image {
         .footer-1 {
           transform: translateX(0);
+          animation: layoutFooterFloat1 5.2s ease-in-out 1.4s infinite;
+          will-change: transform;
+
+          @media #{$sm-layout} {
+            animation: none;
+          }
         }
         .footer-2 {
           transform: translateX(0);
+          animation: layoutFooterFloat2 4.6s ease-in-out 1.5s infinite;
+          will-change: transform;
+
+          @media #{$sm-layout} {
+            animation: none;
+          }
         }
         .footer-3 {
           transform: translateY(0) translateX(-50%);
+          animation: layoutFooterFloat3 5.8s ease-in-out 1.6s infinite;
+          will-change: transform;
 
           @media #{$sm-layout} {
             transform: translate(0);
+            animation: none;
           }
         }
         .footer-4 {
           transform: translateX(0);
+          animation: layoutFooterFloat4 4.8s ease-in-out 1.7s infinite;
+          will-change: transform;
+
+          @media #{$sm-layout} {
+            animation: none;
+          }
         }
         .footer-5 {
           transform: translateX(0);
+          animation: layoutFooterFloat5 5.4s ease-in-out 1.8s infinite;
+          will-change: transform;
+
+          @media #{$sm-layout} {
+            animation: none;
+          }
         }
         
         .header-2 {

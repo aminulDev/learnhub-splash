@@ -55,6 +55,7 @@
         .demo-img {
             position: absolute;
             border-radius: 8px;
+            transition: 1s cubic-bezier(0.31, -0.105, 0.43, 1.4);
 
             @media screen and (max-width: 1800px) {
                 opacity: 0.4;
@@ -70,14 +71,12 @@
             left: -460px;
             width: 208px;
             transform: rotate(31deg) translateY(135px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         }
         .demo-left-2 {
             top: 65px;
             left: -185px;
             width: 215px;
             transform: rotate(31deg) translateY(290px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.1s;
         }
         .demo-left-3 {
@@ -85,7 +84,6 @@
             left: -20px;
             width: 224px;
             transform: rotate(31deg) translateY(290px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.2s;
         }
         .demo-left-4 {
@@ -93,7 +91,6 @@
             left: 200px;
             width: 182px;
             transform: rotate(31deg) translateY(250px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.3s;
         }
         .demo-right-1 {
@@ -101,14 +98,12 @@
             right: -510px;
             width: 223px;
             transform: rotate(-34deg) translateY(65px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
         }
         .demo-right-2 {
             top: 35px;
             right: -225px;
             width: 214px;
             transform: rotate(-34deg) translateY(225px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.1s;
         }
         .demo-right-3 {
@@ -116,7 +111,6 @@
             right: -5px;
             width: 204px;
             transform: rotate(-34deg) translateY(225px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.2s;
         }
         .demo-right-4 {
@@ -124,7 +118,6 @@
             right: 165px;
             width: 212px;
             transform: rotate(-34deg) translateY(225px);
-            transition: 0.5s cubic-bezier(0.31, -0.105, 0.43, 1.4);
             transition-delay: 0.3s;
         }
 

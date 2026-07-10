@@ -1,5 +1,18 @@
 @use "../default" as *;
 
+@keyframes serviceCodeGlow {
+    0%,
+    100% {
+        transform: perspective(700px) rotateY(-5deg) rotateX(3deg) scale(1);
+        filter: drop-shadow(0 6px 16px rgba(178, 110, 247, 0.2));
+    }
+
+    50% {
+        transform: perspective(700px) rotateY(5deg) rotateX(-2deg) scale(1.04);
+        filter: drop-shadow(0 10px 32px rgba(255, 113, 191, 0.55));
+    }
+}
+
 .lrn-service {
     &-wrap {
         display: grid;
@@ -94,6 +107,20 @@
             line-height: 1.5;
             margin: 0;
             text-align: center;
+        }
+    }
+
+    &-illustration {
+        position: relative;
+        width: fit-content;
+
+        .code {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            transform-origin: center center;
+            animation: serviceCodeGlow 3.8s ease-in-out infinite;
+            will-change: transform, filter;
         }
     }
 }
