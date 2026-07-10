@@ -27,11 +27,11 @@
       lernhub.textAnimation();
       lernhub.odometerCounter();
       lernhub.whyChooseAnimation();
+      lernhub.serviceIllustrationAnimation();
       lernhub.layoutScrollActive();
       lernhub.headerLayoutMatter();
       lernhub.reviewMarquee();
       lernhub.galleryAnimation();
-      lernhub.demoCardTilt();
     },
 
     initGsap: function () {
@@ -216,7 +216,7 @@
       new Swiper(".lrn-splash-hero-slider", {
         effect: "coverflow",
         grabCursor: true,
-        slidesPerView: 'auto',
+        slidesPerView: "auto",
         centeredSlides: true,
         loop: true,
         spaceBetween: 0,
@@ -288,8 +288,7 @@
                 slideEl.classList.add("is-hero-hidden");
               } else if (distance > 1.15) {
                 slideEl.classList.add("is-hero-far");
-                const pull =
-                  edgePullBase + Math.min(distance - 1.15, 1) * 90;
+                const pull = edgePullBase + Math.min(distance - 1.15, 1) * 90;
                 const direction = slideEl.progress > 0 ? -1 : 1;
 
                 slideEl.style.setProperty("--hero-edge-pull", `${pull}px`);
@@ -818,55 +817,27 @@
       window.setInterval(updateFeatured, changeEvery);
     },
 
-    demoCardTilt: function () {
-      var cards = document.querySelectorAll(".lrn-demo-section-card");
-      if (!cards.length) {
+    serviceIllustrationAnimation: function () {
+      var illustration = document.querySelector(".lrn-service-illustration");
+      if (!illustration) {
         return;
       }
 
-      var prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      var isTouch = window.matchMedia("(hover: none)").matches;
-
-      if (prefersReducedMotion || isTouch) {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        illustration.classList.add("is-visible");
         return;
       }
 
-      var maxTilt = 10;
-      var scale = 1.02;
+      if (!lernhub.initGsap()) {
+        illustration.classList.add("is-visible");
+        return;
+      }
 
-      cards.forEach(function (card) {
-        card.addEventListener("mousemove", function (e) {
-          var rect = card.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          var centerX = rect.width / 2;
-          var centerY = rect.height / 2;
-          var rotateX = ((y - centerY) / centerY) * -maxTilt;
-          var rotateY = ((x - centerX) / centerX) * maxTilt;
-
-          card.style.transition = "transform 0.12s ease-out";
-          card.style.transform =
-            "perspective(1000px) rotateX(" +
-            rotateX +
-            "deg) rotateY(" +
-            rotateY +
-            "deg) scale3d(" +
-            scale +
-            ", " +
-            scale +
-            ", " +
-            scale +
-            ")";
-        });
-
-        card.addEventListener("mouseleave", function () {
-          card.style.transition =
-            "transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)";
-          card.style.transform =
-            "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-        });
+      ScrollTrigger.create({
+        trigger: illustration,
+        start: "top 85%",
+        toggleClass: "is-visible",
+        once: true,
       });
     },
 
@@ -935,13 +906,10 @@
             thickness,
             { isStatic: true, label: "ground" },
           ),
-          Bodies.rectangle(
-            -thickness / 2,
-            height / 2,
-            thickness,
-            height * 2,
-            { isStatic: true, label: "left-wall" },
-          ),
+          Bodies.rectangle(-thickness / 2, height / 2, thickness, height * 2, {
+            isStatic: true,
+            label: "left-wall",
+          }),
           Bodies.rectangle(
             width + thickness / 2,
             height / 2,
@@ -1032,19 +1000,13 @@
             (Math.random() - 0.5) * (isCompact() ? 30 : 50);
           var spawnY = -50 - index * spawnSpacing - Math.random() * 50;
 
-          var body = Bodies.rectangle(
-            spawnX,
-            spawnY,
-            size.width,
-            size.height,
-            {
-              restitution: 0.45,
-              friction: 0.35,
-              frictionAir: 0.018,
-              density: 0.0018,
-              chamfer: { radius: isCompact() ? 6 : 10 },
-            },
-          );
+          var body = Bodies.rectangle(spawnX, spawnY, size.width, size.height, {
+            restitution: 0.45,
+            friction: 0.35,
+            frictionAir: 0.018,
+            density: 0.0018,
+            chamfer: { radius: isCompact() ? 6 : 10 },
+          });
 
           Composite.add(engine.world, body);
           pairs.push({ body: body, el: img });

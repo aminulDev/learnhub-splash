@@ -114,13 +114,40 @@
         position: relative;
         width: fit-content;
 
+        img:not(.code) {
+            opacity: 0;
+            transform: translateX(-36px);
+            transition:
+                opacity 0.7s ease,
+                transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         .code {
             position: absolute;
             top: 50px;
             right: 0;
-            transform-origin: center center;
-            animation: serviceCodeGlow 3.8s ease-in-out infinite;
-            will-change: transform, filter;
+            opacity: 0;
+            transform: translateX(36px);
+            transition:
+                opacity 0.7s ease 0.12s,
+                transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+        }
+
+        &.is-visible {
+            img:not(.code),
+            .code {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            img:not(.code),
+            .code {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
         }
     }
 }
