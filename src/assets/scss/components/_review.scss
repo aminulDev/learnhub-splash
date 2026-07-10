@@ -214,3 +214,13 @@
         transform: translateY(0);
     }
 }
+
+.title-logo {
+    @media #{$md-layout} {
+        max-width: 170px;
+    }
+
+    @media #{$sm-layout} {
+        max-width: 140px;
+    }
+}
