@@ -112,6 +112,8 @@
           heroTitleSplit.revert();
           heroTitleSplit = null;
         }
+
+        heroGradientText?.classList.remove("is-split");
       };
 
       const splitHeroTitle = () => {
@@ -120,6 +122,7 @@
           type: "chars",
           charsClass: "hero-char",
         });
+        heroGradientText.classList.add("is-split");
         lernhub.applyHeroCharGradient(heroTitleSplit.chars);
         return heroTitleSplit.chars;
       };
@@ -136,20 +139,53 @@
         if (heroTitleTimeline) {
           heroTitleTimeline.kill();
           heroTitleTimeline = null;
-
-          if (heroTitleSplit) {
-            revertHeroTitleSplit();
-            heroGradientText.textContent = currentHeroTitle;
-          }
         }
 
         if (!hasHeroAnimation) {
+          revertHeroTitleSplit();
           heroGradientText.textContent = title;
           currentHeroTitle = title;
           return;
         }
 
-        const playIn = () => {
+        const prevTitle = currentHeroTitle;
+        let outChars = null;
+
+        if (!isInitial && prevTitle && prevTitle !== title) {
+          if (heroTitleSplit?.chars?.length) {
+            outChars = Array.from(heroTitleSplit.chars);
+          } else {
+            revertHeroTitleSplit();
+            heroGradientText.textContent = prevTitle;
+            outChars = Array.from(splitHeroTitle());
+          }
+        }
+
+        const tl = gsap.timeline({
+          onComplete: () => {
+            if (heroTitleTimeline === tl) {
+              heroTitleTimeline = null;
+            }
+          },
+        });
+        heroTitleTimeline = tl;
+
+        if (outChars?.length) {
+          tl.to(outChars, {
+            yPercent: -100,
+            autoAlpha: 0,
+            rotateX: 45,
+            transformOrigin: "50% 0%",
+            duration: 0.25,
+            ease: "power2.in",
+            stagger: {
+              each: 0.012,
+              from: "start",
+            },
+          });
+        }
+
+        tl.add(() => {
           revertHeroTitleSplit();
           heroGradientText.textContent = title;
           currentHeroTitle = title;
@@ -159,52 +195,25 @@
             return;
           }
 
-          heroTitleTimeline = gsap.fromTo(
-            chars,
-            {
-              yPercent: 110,
-              opacity: 0,
-              rotateX: -45,
-              transformOrigin: "50% 100%",
-            },
-            {
-              yPercent: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: isInitial ? 0.8 : 0.6,
-              ease: "power3.out",
-              stagger: {
-                each: 0.03,
-                from: "start",
-              },
-            },
-          );
-        };
-
-        const canAnimateOut =
-          !isInitial &&
-          heroTitleSplit?.chars?.length &&
-          currentHeroTitle &&
-          currentHeroTitle !== title;
-
-        if (canAnimateOut) {
-          heroTitleTimeline = gsap.to(heroTitleSplit.chars, {
-            yPercent: -110,
-            opacity: 0,
-            rotateX: 45,
-            transformOrigin: "50% 0%",
-            duration: 0.35,
-            ease: "power3.in",
-            stagger: {
-              each: 0.02,
-              from: "end",
-            },
-            onComplete: playIn,
+          gsap.set(chars, {
+            yPercent: 110,
+            autoAlpha: 0,
+            rotateX: -45,
+            transformOrigin: "50% 100%",
           });
-          return;
-        }
 
-        playIn();
+          tl.to(chars, {
+            yPercent: 0,
+            autoAlpha: 1,
+            rotateX: 0,
+            duration: isInitial ? 0.8 : 0.55,
+            ease: "power3.out",
+            stagger: {
+              each: 0.025,
+              from: "start",
+            },
+          });
+        });
       };
 
       const updateHeroTitle = (swiper, isInitial = false) => {

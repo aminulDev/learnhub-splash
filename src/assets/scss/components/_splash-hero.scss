@@ -92,15 +92,21 @@
       display: inline-block;
       overflow: hidden;
       vertical-align: top;
-      perspective: 900px;
     }
 
     .lrn-hero-title-text {
       display: inline-block;
+      perspective: 900px;
+
+      // Parent background-clip:text leaves static ghost glyphs while
+      // SplitText chars animate with transforms — disable it once split.
+      &.is-split {
+        background: none;
+        -webkit-text-fill-color: unset;
+      }
 
       .hero-char {
         display: inline-block;
-        will-change: transform, opacity;
         -webkit-text-fill-color: currentColor;
       }
     }
